@@ -1,0 +1,144 @@
+package group730.bookingclient.core.services;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import group730.bookingclient.core.entities.User;
+
+/**
+ * This class manages all the Flight related operations including retrieval of
+ * the collection of all mUsers, mUsers as mUsers of program, add more mUsers to
+ * collection, set currentBlog, get currentBlog, instantiate UserManager,
+ * get instance of UserManager.
+ */
+public class UserManager {
+
+    public enum USER_TYPE {
+        ADMINISTRATOR,
+        CLIENT
+    }
+
+    private Map<String, User> mUsers;
+    private static UserManager sUserManager;
+    private User mCurrentUser;
+
+    /**
+     * Gets a UserManager instance or instantiate one if none exits.
+     *
+     * @return UserManager
+     */
+    public static UserManager getInstance() {
+        if (sUserManager == null)
+            sUserManager = new UserManager();
+        return sUserManager;
+    }
+
+    /**
+     * Handles the assignment of the mUsers by loading Users from the data
+     * store.
+     */
+    private UserManager() {
+        mUsers = new HashMap<>();
+    }
+
+    /**
+     * References to the current user that is being interacted with.
+     *
+     * @return User object the represents the current user.
+     */
+    public User getCurrentUser() {
+        return this.mCurrentUser;
+    }
+
+    /**
+     * Updates the reference of the current user that is being interacted with.
+     *
+     * @param user
+     */
+    public void setCurrentUser(User user) {
+        this.mCurrentUser = user;
+    }
+
+    /**
+     * Returns a Map containing all the Users.
+     *
+     * @return Map containing all the mUsers with the key being the email
+     * address and the value being the user object.
+     */
+    public Map<String, User> getUsers() {
+        return mUsers;
+    }
+
+    /**
+     * Returns a Map containing all the clients.
+     *
+     * @return Map containing all the clients with the key being the email
+     * address and the value being the client object.
+     */
+    public Map<String, User> getClients() {
+        Map<String, User> clients = new HashMap<>();
+
+        for (User user : this.mUsers.values()) {
+            if (user.getUserType() == USER_TYPE.CLIENT) {
+                clients.put(user.getEmail(), user);
+            }
+        }
+
+        return clients;
+    }
+
+    /**
+     * Re/Assigns the of a Map containing all the mUsers.
+     *
+     * @param users Map containing all the mUsers with the key being the mEmail
+     *              address and the value being its user.
+     */
+    public void setUsers(Map<String, User> users) {
+        this.mUsers = users;
+    }
+
+    /**
+     * Adds all Users in a Map containing a mapping of user emails to their user
+     * objects to this classes Map with the same mapping.
+     *
+     * @param users Map containing all the mUsers with the key being the mEmail
+     *              address and the value being its user.
+     */
+    public void addUsers(List<User> users) {
+        for (User user : users) {
+            if (this.mUsers.keySet().contains(user.getEmail())) {
+                this.mUsers.remove(user.getEmail());
+            }
+            this.mUsers.put(user.getEmail(), user);
+        }
+    }
+
+    /**
+     * Adds all Users in a Map containing a mapping of user emails to their user
+     * objects to this classes Map with the same mapping.
+     */
+    public void saveUsers() {
+        DataManager.getInstance().saveUsers(this.mUsers);
+    }
+
+    /**
+     * Checks to see whether the an account with Email and Password exists.
+     * If yes, then return the User object with that Email and Password.
+     * If not, then return null.
+     *
+     * @param email    The email of the user as a string.
+     * @param password The password of the user as a string.
+     * @return User representing the validated user or null.
+     */
+    public User validateAndReturnUser(String email, String password) {
+        if (this.mUsers.containsKey(email)) {
+            User user = this.getUsers().get(email);
+            if (user.getPassword().equals(password)) {
+                return user;
+            }
+        }
+        return null;
+    }
+
+}

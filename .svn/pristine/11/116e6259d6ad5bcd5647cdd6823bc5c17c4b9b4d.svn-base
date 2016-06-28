@@ -1,0 +1,28 @@
+package group730.bookingclient.core;
+
+import android.content.Context;
+
+import java.io.File;
+
+public class BookingClient {
+
+    private static BookingClient sBookingClient;
+
+    public static BookingClient GetInstance() {
+        if (sBookingClient == null)
+            sBookingClient = new BookingClient();
+        return sBookingClient;
+    }
+
+    private BookingClient() {
+        //Initialize();
+    }
+
+    private void Initialize(Context context) {
+        File usersFile = new File(context.getApplicationContext().getFilesDir(), "users.ser");
+        File flightsFile = new File(context.getApplicationContext().getFilesDir(), "flights.ser");
+
+
+    }
+
+}

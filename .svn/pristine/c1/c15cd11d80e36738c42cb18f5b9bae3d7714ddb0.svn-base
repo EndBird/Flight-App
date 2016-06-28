@@ -1,0 +1,189 @@
+package driver;
+
+import core.entities.Flight;
+import core.entities.Itinerary;
+import core.entities.User;
+import core.services.DataManager;
+import core.services.FlightManager;
+import core.services.ItineraryManager;
+import core.services.UserManager;
+import core.utils.ItineraryFactory;
+
+import java.util.List;
+
+/**
+ * A Driver used for autotesting the project backend.
+ */
+public class Driver {
+
+    /**
+     * Uploads client information to the application from the file at the given
+     * path.
+     *
+     * @param path the path to an input csv file of client information with
+     *             lines in the format:
+     *             LastName,FirstNames,Email,Address,CreditCardNumber,ExpiryDate
+     *             (the ExpiryDate is stored in the format YYYY-MM-DD)
+     */
+    public static void uploadClientInfo(String path) {
+        for (User user : DataManager.getInstance().parseUsers(path)) {
+            UserManager.getInstance().getUsers().put(user.getEmail(), user);
+        }
+    }
+
+    /**
+     * Uploads flight information to the application from the file at the given
+     * path.
+     *
+     * @param path the path to an input csv file of flight information with
+     *             lines in the format:
+     *             Number,DepartureDateTime,ArrivalDateTime,Airline,Origin,
+     *             Destination,Price (the dates are in the format YYYY-MM-DD;
+     *             the price has exactly two decimal places)
+     */
+    public static void uploadFlightInfo(String path) {
+        List<Flight> newFlights = DataManager.getInstance().parseFlights(path);
+
+        FlightManager.getFlightsGraph().addFlights(newFlights);
+    }
+
+    /**
+     * Returns the information stored for the client with the given email.
+     *
+     * @param email the email address of a client
+     * @return the information stored for the client with the given email in
+     * this format:
+     * LastName,FirstNames,Email,Address,CreditCardNumber,ExpiryDate
+     * (the ExpiryDate is stored in the format YYYY-MM-DD)
+     */
+    public static String getClient(String email) {
+        return UserManager.getInstance().getUsers().get(email).toString();
+    }
+
+    /**
+     * Returns all flights that depart from origin and arrive at destination on
+     * the given date.
+     *
+     * @param date        a departure date (in the format YYYY-MM-DD)
+     * @param origin      a flight origin
+     * @param destination a flight destination
+     * @return the flights that depart from origin and arrive at destination on
+     * the given date formatted with one flight per line in exactly this
+     * format: Number,DepartureDateTime,ArrivalDateTime,Airline,Origin,
+     * Destination,Price (the dates are in the format YYYY-MM-DD; the
+     * price has exactly two decimal places)
+     */
+    public static String getFlights(String date,
+                                    String origin,
+                                    String destination) {
+
+        String s = "";
+
+        List<Flight> flights = FlightManager.getFlightsFromTo(date,
+                origin, destination);
+
+        for (Flight flight : flights) {
+
+            s += flight.toString();
+        }
+
+        return s;
+    }
+
+    /**
+     * Returns all itineraries that depart from origin and arrive at destination
+     * on the given date. If an itinerary contains two consecutive flights F1
+     * and F2, then the destination of F1 should match the origin of F2. To
+     * simplify our task, if there are more than 6 hours between the arrival of
+     * F1 and the departure of F2, then we do not consider this sequence for a
+     * possible itinerary (we judge that the stopover is too long).
+     *
+     * @param date        a departure date (in the format YYYY-MM-DD)
+     * @param origin      a flight original
+     * @param destination a flight destination
+     * @return itineraries that depart from origin and arrive at destination on
+     * the given date with stopovers at or under 6 hours. Each itinerary
+     * in the output should contain one line per flight, in the format:
+     * Number,DepartureDateTime,ArrivalDateTime,Airline,Origin,
+     * Destination followed by total price (on its own line, exactly two
+     * decimal places), followed by total duration (on its own line, in
+     * format HH:MM).
+     */
+    public static String getItineraries(String date,
+                                        String origin,
+                                        String destination) {
+
+        List<Itinerary> itineraries = ItineraryFactory.generateItineraries(date,
+                origin, destination);
+
+        return formatItineraries(itineraries);
+    }
+
+    /**
+     * Returns the same itineraries as getItineraries produces, but sorted
+     * according to total itinerary cost, in non-decreasing order.
+     *
+     * @param date        a departure date (in the format YYYY-MM-DD)
+     * @param origin      a flight original
+     * @param destination a flight destination
+     * @return itineraries (sorted in non-decreasing order of total itinerary
+     * cost) that depart from origin and arrive at destination on the
+     * given date with stopovers at or under 6 hours. Each itinerary in
+     * the output should contain one line per flight, in the format:
+     * Number,DepartureDateTime,ArrivalDateTime,Airline,Origin,
+     * Destination followed by total price (on its own line, exactly two
+     * decimal places), followed by total duration (on its own line, in
+     * format HH:MM).
+     */
+    public static String getItinerariesSortedByCost(String date,
+                                                    String origin,
+                                                    String destination) {
+
+        List<Itinerary> itineraries = ItineraryFactory.generateItineraries(date,
+                origin, destination);
+
+        ItineraryManager.sortCostHigh(itineraries);
+
+        return formatItineraries(itineraries);
+    }
+
+    /**
+     * Returns the same itineraries as getItineraries produces, but sorted
+     * according to total itinerary travel time, in non-decreasing order.
+     *
+     * @param date        a departure date (in the format YYYY-MM-DD)
+     * @param origin      a flight original
+     * @param destination a flight destination
+     * @return itineraries (sorted in non-decreasing order of travel itinerary
+     * travel time) that depart from origin and arrive at destination on
+     * the given date with stopovers at or under 6 hours. Each itinerary
+     * in the output should contain one line per flight, in the format:
+     * Number,DepartureDateTime,ArrivalDateTime,Airline,Origin,
+     * Destination followed by total price (on its own line, exactly two
+     * decimal places), followed by total duration (on its own line, in
+     * format HH:MM).
+     */
+    public static String getItinerariesSortedByTime(String date,
+                                                    String origin,
+                                                    String destination) {
+
+        List<Itinerary> itineraries = ItineraryFactory.generateItineraries(date,
+                origin, destination);
+
+        ItineraryManager.sortTimeHigh(itineraries);
+
+        return formatItineraries(itineraries);
+    }
+
+    // Format collection of itineraries to a string.
+    private static String formatItineraries(List<Itinerary> itineraries) {
+
+        String s = "";
+
+        for (Itinerary itinerary : itineraries) {
+            s += itinerary.toString();
+        }
+
+        return s;
+    }
+}

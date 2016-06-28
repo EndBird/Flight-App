@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="group730.bookingclient">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/Theme.AppCompat">
+        <activity
+            android:name=".activities.LoginActivity"
+            android:label="@string/title_activity_login"
+            android:windowSoftInputMode="adjustResize|stateVisible">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activities.HomeActivity"
+            android:label="@string/title_activity_home" />
+        <activity
+            android:name=".activities.SearchResultsActivity"
+            android:label="@string/title_activity_search_results" />
+        <activity
+            android:name=".activities.UserListActivity"
+            android:label="@string/title_user_list" />
+        <activity
+            android:name=".activities.UserDetailActivity"
+            android:label="@string/title_user_detail"
+            android:parentActivityName=".activities.UserListActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="group730.bookingclient.activities.UserListActivity" />
+        </activity>
+        <activity
+            android:name=".activities.EditFlightActivity"
+            android:label="@string/title_activity_edit_flight"></activity>
+    </application>
+
+</manifest>

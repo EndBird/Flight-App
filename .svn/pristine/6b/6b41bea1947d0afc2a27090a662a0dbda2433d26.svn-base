@@ -1,0 +1,101 @@
+package group730.bookingclient.core.services;
+
+import group730.bookingclient.core.entities.Client;
+import group730.bookingclient.core.entities.User;
+
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * This class manages all the Flight related operations including retrieval of
+ * the collection of all users, users as users of program, add more users to
+ * collection, set currentBlog, get currentBlog, instantiate UserManager,
+ * get instance of UserManager.
+ */
+public class UserManager {
+
+    public enum USER_TYPE {
+        ADMINISTRATOR,
+        CLIENT
+    }
+
+    private Map<String, User> users;
+    private static UserManager userManager;
+
+    /**
+     * Get a UserManager instance or instantiate one if none exits.
+     *
+     * @return UserManager
+     */
+    public static UserManager getInstance() {
+        if (userManager == null)
+            userManager = new UserManager();
+        return userManager;
+    }
+
+    /**
+     * Handles the assignment of the users by loading users from the data
+     * store.
+     */
+    private UserManager() {
+        users = new HashMap<>();
+        //users = DataManager.getInstance().loadUsers();
+    }
+
+    /**
+     * Returns a Map containing all the users.
+     *
+     * @return Map containing all the users with the key being the email address
+     * and the value being its user.
+     */
+    public Map<String, User> getUsers() {
+        return users;
+    }
+
+    /**
+     * Re/Assigns the of a Map containing all the users.
+     *
+     * @param users Map containing all the users with the key being the email
+     *              address and the value being its user.
+     */
+    public void setUsers(Map<String, User> users) {
+        this.users = users;
+    }
+
+    /**
+     * Add all users in a Map containing a mapping of user emails to their user
+     * objects to this classes Map with the same mapping.
+     *
+     * @param users Map containing all the users with the key being the email
+     *              address and the value being its user.
+     */
+    public void addUsers(Map<String, User> users) {
+        for (String user : users.keySet()) {
+            if (this.users.keySet().contains(user)) {
+                Client existingUser = (Client) this.users.get(user);
+                Client newUser = (Client) users.get(user);
+               existingUser = newUser;
+
+            } else {
+                this.users.put(user, users.get(user));
+            }
+        }
+        this.users.putAll(users);
+
+    }
+
+    /**
+     * Add all users in a Map containing a mapping of user emails to their user
+     * objects to this classes Map with the same mapping.
+     */
+    public void saveUsers() {
+        DataManager.getInstance().saveUsers(this.users);
+    }
+
+    public User validateAndReturnUser(String email, String password) {
+        if (this.users.containsKey(email))
+            return this.users.get(email);
+        return null;
+    }
+
+}

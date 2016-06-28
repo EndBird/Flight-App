@@ -1,0 +1,227 @@
+package group730.bookingclient.fragments;
+
+import android.app.Activity;
+import android.net.Uri;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.ArrayList;
+
+import group730.bookingclient.R;
+import group730.bookingclient.core.entities.Client;
+import group730.bookingclient.core.entities.User;
+import group730.bookingclient.core.services.UserManager;
+
+
+/**
+ * A simple {@link Fragment} subclass.
+ * Activities that contain this fragment must implement the
+ * {@link UserDetailsFragment.OnFragmentInteractionListener} interface
+ * to handle interaction events.
+ * Use the {@link UserDetailsFragment#newInstance} factory method to
+ * create an instance of this fragment.
+ */
+public class UserDetailsFragment extends Fragment {
+
+    private Spinner mUserPickerDropdown;
+    private EditText mFirstNameView;
+    private EditText mLastNameView;
+    private EditText mEmailView;
+    private TextView mAddressViewHeader;
+    private EditText mAddressView;
+    private TextView mPasswordViewHeader;
+    private EditText mPasswordView;
+    private Button mToggleEditable;
+
+    private static boolean sSelectorInitialized;
+    private static User sCurrentUser;
+
+    private OnFragmentInteractionListener mListener;
+
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @return A new instance of fragment UserDetailsFragment.
+     */
+    // TODO: Rename and change types and number of parameters
+    public static UserDetailsFragment newInstance() {
+        UserDetailsFragment fragment = new UserDetailsFragment();
+        return fragment;
+    }
+
+    public UserDetailsFragment() {
+        // Required empty public constructor
+    }
+
+    public static User getEditableUser() {
+        if (sCurrentUser == null)
+            sCurrentUser = UserManager.getInstance().getCurrentUser();
+        return sCurrentUser;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_user_details, container, false);
+
+
+        mUserPickerDropdown = (Spinner) view.findViewById(R.id.userPickerDropdown);
+        mFirstNameView = (EditText) view.findViewById(R.id.firstNameField);
+        mLastNameView = (EditText) view.findViewById(R.id.lastNameField);
+        mEmailView = (EditText) view.findViewById(R.id.emailField);
+        mAddressViewHeader = (TextView) view.findViewById(R.id.addressFieldHeader);
+        mAddressView = (EditText) view.findViewById(R.id.addressField);
+        mPasswordViewHeader = (TextView) view.findViewById(R.id.passwordFieldHeader);
+        mPasswordView = (EditText) view.findViewById(R.id.passwordField);
+        mToggleEditable = (Button) view.findViewById(R.id.toggleEditable);
+        mToggleEditable.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mUserPickerDropdown.setEnabled(!mUserPickerDropdown.isEnabled());
+                mFirstNameView.setEnabled(!mFirstNameView.isEnabled());
+                mLastNameView.setEnabled(!mLastNameView.isEnabled());
+                mEmailView.setEnabled(!mEmailView.isEnabled());
+                mAddressView.setEnabled(!mAddressView.isEnabled());
+                mPasswordViewHeader.setVisibility(mPasswordViewHeader.getVisibility() == View.GONE ?
+                        View.VISIBLE : View.GONE);
+                mPasswordView.setVisibility(mPasswordViewHeader.getVisibility());
+                mToggleEditable.setText(mPasswordView.getVisibility() == View.VISIBLE ?
+                        R.string.button_save : R.string.button_edit);
+
+                if (mToggleEditable.getText().toString() == getString(R.string.button_edit))
+                    saveUser();
+            }
+        });
+
+        if (UserManager.getInstance().getCurrentUser().getUserType() ==
+                UserManager.USER_TYPE.ADMINISTRATOR) {
+            mAddressViewHeader.setVisibility(View.GONE);
+            mAddressView.setVisibility(View.GONE);
+            mUserPickerDropdown.setVisibility(View.VISIBLE);
+
+            ArrayAdapter<String> users = new ArrayAdapter<>(getActivity().getApplicationContext(),
+                    android.R.layout.simple_list_item_1,
+                    new ArrayList<>(UserManager.getInstance().getUsers().keySet()));
+
+            mUserPickerDropdown.setAdapter(users);
+            mUserPickerDropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    if (!sSelectorInitialized) {
+                        int p = ((ArrayAdapter) mUserPickerDropdown.getAdapter())
+                                .getPosition(getEditableUser().getEmail());
+
+                        mUserPickerDropdown.setSelection(p);
+
+                        sSelectorInitialized = true;
+                        return;
+                    }
+
+                    String email = mUserPickerDropdown.getAdapter().getItem(position).toString();
+                    sCurrentUser = UserManager.getInstance().getUsers().get(email);
+                    updateFields();
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
+        } else {
+            mAddressViewHeader.setVisibility(View.VISIBLE);
+            mAddressView.setVisibility(View.VISIBLE);
+            mUserPickerDropdown.setVisibility(View.GONE);
+        }
+
+        updateFields();
+        return view;
+    }
+
+    private void updateFields() {
+        mFirstNameView.setText(getEditableUser().getFirstName());
+        mLastNameView.setText(getEditableUser().getLastName());
+        mEmailView.setText(getEditableUser().getEmail());
+        if (getEditableUser().getUserType() == UserManager.USER_TYPE.CLIENT) {
+            mAddressViewHeader.setVisibility(View.VISIBLE);
+            mAddressView.setVisibility(View.VISIBLE);
+            mAddressView.setText(((Client) getEditableUser()).getAddress());
+        } else {
+            mAddressViewHeader.setVisibility(View.GONE);
+            mAddressView.setVisibility(View.GONE);
+        }
+    }
+
+    private void saveUser() {
+        try {
+            getEditableUser().setFirstName(mFirstNameView.getText().toString());
+            getEditableUser().setLastName(mLastNameView.getText().toString());
+            getEditableUser().setEmail(mEmailView.getText().toString());
+            if (getEditableUser().getUserType() == UserManager.USER_TYPE.CLIENT) {
+                ((Client) getEditableUser()).setAddress(mAddressView.getText().toString());
+            }
+            getEditableUser().setPassword(mPasswordView.getText().toString());
+
+            Toast.makeText(getActivity(), "Saved user.", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+
+            Toast.makeText(getActivity(), "Failed to save user.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    // TODO: Rename method, update argument and hook method into UI event
+    public void onButtonPressed(Uri uri) {
+        if (mListener != null) {
+            mListener.onFragmentInteraction(uri);
+        }
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mListener = (OnFragmentInteractionListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    /**
+     * This interface must be implemented by activities that contain this
+     * fragment to allow an interaction in this fragment to be communicated
+     * to the activity and potentially other fragments contained in that
+     * activity.
+     * <p/>
+     * See the Android Training lesson <a href=
+     * "http://developer.android.com/training/basics/fragments/communicating.html"
+     * >Communicating with Other Fragments</a> for more information.
+     */
+    public interface OnFragmentInteractionListener {
+        // TODO: Update argument type and name
+        void onFragmentInteraction(Uri uri);
+    }
+
+}

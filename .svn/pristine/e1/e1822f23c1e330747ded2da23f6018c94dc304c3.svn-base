@@ -1,0 +1,122 @@
+package group730.bookingclient.core.entities;
+
+import java.util.Date;
+
+import group730.bookingclient.core.services.UserManager;
+
+/**
+ * Created by HuynhsComputer on 2015-11-27.
+ *
+ *
+ * Administrator class for an administrator, which is a subclass for User.
+ *
+ * Administrator has a usertype
+ */
+public class Administrator extends User {
+
+    protected UserManager.USER_TYPE userType;
+    protected String firstName;
+    protected String lastName;
+    protected String email;
+
+
+    public Administrator(
+                         String firstName, String lastName, String email) {
+        super(UserManager.USER_TYPE.ADMINISTRATOR, firstName, lastName, email);
+    }
+
+    /**
+     * Returns the access level of this user.
+     *
+     * @return The access level as a {@see USER_TYPE} enum.
+     */
+    public UserManager.USER_TYPE getUserType() {
+        return super.getUserType();
+    }
+
+    /**
+     * Sets this users access level to a given access level from {@see USER_TYPE}
+     *
+     * @param userType The access level as a {@see USER_TYPE} enum.
+     */
+    public void setUserType(UserManager.USER_TYPE userType) {
+        super.setUserType(userType);
+    }
+
+    /**
+     * @return the firstName
+     */
+    public String getFirstName() {
+        return super.getFirstName();
+    }
+
+    /**
+     * @param firstName the firstName to set
+     */
+    public void setFirstName(String firstName) {
+        super.setFirstName(firstName);
+    }
+
+    /**
+     * @return the lastName
+     */
+    public String getLastName() {
+        return super.getLastName();
+    }
+
+    /**
+     * @param lastName the lastName to set
+     */
+    public void setLastName(String lastName) {
+        super.setLastName(lastName);
+    }
+
+    /**
+     * @return the email
+     */
+    public String getEmail() {
+        return super.getEmail();
+    }
+
+    /**
+     * @param email the email to set
+     */
+    public void setEmail(String email) {
+        super.setEmail(email);
+    }
+
+    public String viewClientInfo(Client client) {
+        return client.toString();
+    }
+
+    public void bookForClient(Client client, Itinerary itinerary) {
+        client.bookItinerary(itinerary);
+    }
+
+
+    public void editClientFirstName(Client client, String firstName) {
+        client.setFirstName(firstName);
+    }
+
+    public void editClientLastName(Client client, String lastName) {
+        client.setLastName(lastName);
+
+    }
+
+    public void editClientemail(Client client, String email)  {
+
+        client.setEmail(email);
+
+    }
+
+    public void editClientAddress (Client client, String address)
+    {
+        client.setAddress(address);
+    }
+    public void editClientCreditCardNumber(Client client, String creditCard)
+    {client.setCreditCardNumber(creditCard);}
+
+    public void editClientExpiryDate(Client client, Date expiryDate)  {
+        client.setExpiryDate(expiryDate);
+    }
+}

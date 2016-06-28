@@ -1,0 +1,151 @@
+package group730.bookingclient.core.entities;
+
+import java.util.Date;
+import java.util.List;
+
+import group730.bookingclient.core.services.DataManager;
+import group730.bookingclient.core.services.UserManager;
+
+/**
+ * Created by HuynhsComputer on 2015-11-27.
+ * <p/>
+ * <p/>
+ * Administrator class for an administrator, which is a subclass of User.
+ * <p/>
+ * Administrator has a usertype
+ */
+public class Administrator extends User {
+
+    /**
+     * Creates an Administrator object.
+     *
+     * @param firstName String represents the first name of the Administrator.
+     * @param lastName  String represents the last name of Administrator.
+     * @param email     String represents the last name of the Administrator.
+     * @param password  String represents the password of the Administrator.
+     */
+    public Administrator(
+            String firstName, String lastName, String email, String password) {
+        super(UserManager.USER_TYPE.ADMINISTRATOR, firstName, lastName, email, password);
+    }
+
+
+    /**
+     * Returns information pertaining to client.
+     *
+     * @param client the client of which info will be shown.
+     */
+    public String viewClientInfo(Client client) {
+        return client.toString();
+    }
+
+    /**
+     * Books itinerary for client.
+     *
+     * @param client    the client who will book itinerary.
+     * @param itinerary the itinerary that will be booked.
+     */
+    public void bookForClient(Client client, Itinerary itinerary) {
+        client.bookItinerary(itinerary);
+    }
+
+    /**
+     * Edits client's first name.
+     *
+     * @param client    the client whose first name will be changed.
+     * @param firstName the name that will be attributed to client.
+     */
+    public void editClientFirstName(Client client, String firstName) {
+        client.setFirstName(firstName);
+    }
+
+    /**
+     * Edits client's last name.
+     *
+     * @param client   the client whose last name will be changed.
+     * @param lastName the name that will be attributed to client.
+     */
+    public void editClientLastName(Client client, String lastName) {
+        client.setLastName(lastName);
+
+    }
+
+    /**
+     * Edits client's email.
+     *
+     * @param client the client whose email will be changed.
+     * @param email  the email that will be attributed to client.
+     */
+    public void editClientemail(Client client, String email) {
+
+        client.setEmail(email);
+
+    }
+
+    /**
+     * Edits client's address.
+     *
+     * @param client  the client whose address will be changed.
+     * @param address the address that will be attributed to client.
+     */
+    public void editClientAddress(Client client, String address) {
+        client.setAddress(address);
+    }
+
+    /**
+     * Edits client's credit card number.
+     *
+     * @param client     the client whose credit card number will be changed.
+     * @param creditCard the credit card number that will be attributed to client.
+     */
+    public void editClientCreditCardNumber(Client client, String creditCard) {
+        client.setCreditCardNumber(creditCard);
+    }
+
+    /**
+     * Edits client's credit card's expiry date.
+     *
+     * @param client     the client whose credit card's expiry date will be changed.
+     * @param expiryDate the expiry date that will be attributed to client's credit card.
+     */
+    public void editClientExpiryDate(Client client, Date expiryDate) {
+        client.setExpiryDate(expiryDate);
+    }
+
+    /** See DataManager.parseFlights(String pathtofile).
+     *
+     * @param pathtofile String that a path to a file of user data.
+     * @return List of Flights.
+     */
+
+    public List<Flight> parseFlights(String pathtofile) {
+
+        return DataManager.getInstance().parseFlights(pathtofile);
+    }
+
+    /** See DataManager.parseUsers(String pathtofile).
+     *
+     * @param pathtofile String that is a path to a file that contains
+     *        user data.
+     * @return List of User.
+     */
+    public List<User> parseUser(String pathtofile) {
+        return DataManager.getInstance().parseUsers(pathtofile);
+    }
+
+    /**
+     * Returns String representation of this administrator in the following format:
+     * lastName,firstName,email
+     *
+     * @return A string representation of administrator.
+     */
+    @Override
+    public String toString() {
+        return String.format("%s,%s,%s",
+                lastName,
+                firstName,
+                email);
+    }
+
+
+}

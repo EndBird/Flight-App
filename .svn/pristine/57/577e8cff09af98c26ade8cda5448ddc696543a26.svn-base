@@ -1,0 +1,114 @@
+package group730.bookingclient.fragments;
+
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.io.IOException;
+import java.util.List;
+
+import group730.bookingclient.R;
+import group730.bookingclient.core.entities.Flight;
+import group730.bookingclient.core.entities.User;
+import group730.bookingclient.core.services.DataManager;
+import group730.bookingclient.core.services.FlightManager;
+import group730.bookingclient.core.services.UserManager;
+
+/**
+ * A simple {@link Fragment} subclass.
+ * Use the {@link AdminToolsFragment#newInstance} factory method to
+ * create an instance of this fragment.
+ */
+public class AdminToolsFragment extends Fragment {
+
+    private TextView usersFilePath;
+    private TextView flightsFilePath;
+
+    /**
+     * Constructs the AdminToolsFragment object.
+     */
+    public AdminToolsFragment() {
+        // Required empty public constructor
+    }
+
+    /**
+     * Uses this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @return A new instance of fragment AdminToolsFragment.
+     */
+    // TODO: Rename and change types and number of parameters
+    public static AdminToolsFragment newInstance() {
+        return new AdminToolsFragment();
+    }
+
+    /**
+     * See the parent class Fragment.oncreate.
+     * @param savedInstanceState
+     */
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    /**
+     * todo:
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_admin_tools,
+                container, false);
+
+        usersFilePath = (TextView) view.findViewById(R.id.usersFilePath);
+        Button uploadUsersButton = (Button) view.findViewById(R.id.uploadUsers);
+        uploadUsersButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    List<User> users = DataManager.getInstance().parseUsers(
+                            usersFilePath.getText().toString());
+
+                    UserManager.getInstance().addUsers(users);
+                    Toast.makeText(getActivity(),
+                            "Added/updated " + users.size() + " users.",
+                            Toast.LENGTH_SHORT).show();
+                } catch (IOException e) {
+                    usersFilePath.setError("Unable to find requested file.");
+                }
+            }
+        });
+
+        flightsFilePath = (TextView) view.findViewById(R.id.flightsFilePath);
+        Button uploadFlights = (Button) view.findViewById(R.id.uploadFlights);
+        uploadFlights.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    List<Flight> flights;
+                    flights = DataManager.getInstance().parseFlights(
+                            flightsFilePath.getText().toString());
+
+                    FlightManager.getFlightsGraph().addFlights(flights);
+
+                    Toast.makeText(getActivity(),
+                            "Added/updated " + flights.size() + " flights.",
+                            Toast.LENGTH_SHORT).show();
+                } catch (IOException e) {
+                    flightsFilePath.setError("Unable to find requested file.");
+                }
+            }
+        });
+        return view;
+    }
+}

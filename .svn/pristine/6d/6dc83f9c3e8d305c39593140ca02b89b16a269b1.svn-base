@@ -1,0 +1,42 @@
+package group730.bookingclient;
+
+import android.content.Context;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import group730.bookingclient.core.entities.Administrator;
+import group730.bookingclient.core.entities.User;
+
+public class BookingClient {
+
+    private static Context sContext;
+    private static BookingClient sBookingClient;
+
+    public static BookingClient GetInstance() {
+        if (sBookingClient == null)
+            sBookingClient = new BookingClient();
+        return sBookingClient;
+    }
+
+    private BookingClient() {
+        //initialize();
+    }
+
+    public void initialize(Context context) {
+        sContext = context;
+
+        generateDummyData();
+    }
+
+    private void generateDummyData() {
+
+        List<User> users = new ArrayList<>();
+        users.add(new Administrator("Root", "User", "root@root.com", "root"));
+        group730.bookingclient.core.services.UserManager.getInstance().addUsers(users);
+    }
+
+    public Context getContext() {
+        return sContext;
+    }
+}

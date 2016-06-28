@@ -1,0 +1,106 @@
+package entities;
+
+import java.util.Date;
+import java.util.List;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.services.UserManager;
+
+
+import group730.bookingclient.core.utils.DateTimeUtils;
+
+
+public class Admintrator implements User{
+
+	@Override
+	public String getFirstName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setFirstName(String firstName) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String getLastName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setLastName(String lastName) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String getEmail() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setEmail(String email) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String getAddress() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setAddress(String address) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String getCreditCardNumber() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setCreditCardNumber(String creditCardNumber) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Date getExpiryDate() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setExpiryDate(Date expiryDate) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void bookItinerary(Itinerary itinerary) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void unBookItinerary(Itinerary itinerary) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<Itinerary> getBookedItineraries() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+
+}

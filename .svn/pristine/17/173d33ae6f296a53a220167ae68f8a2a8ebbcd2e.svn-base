@@ -1,0 +1,13 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".activities.SearchResultsActivity">
+    <item android:id="@+id/action_filter_cost_low" android:title="@string/action_filter_cost_low"
+        android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/action_filter_cost_high" android:title="@string/action_filter_cost_high"
+        android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/action_filter_time_low" android:title="@string/action_filter_time_low"
+        android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/action_filter_time_high" android:title="@string/action_filter_time_high"
+        android:orderInCategory="100" app:showAsAction="never" />
+</menu>

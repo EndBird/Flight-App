@@ -1,0 +1,187 @@
+package group730.bookingclient.core.entities;
+
+import java.util.Date;
+
+import group730.bookingclient.core.services.UserManager;
+
+/**
+ * Created by HuynhsComputer on 2015-11-27.
+ *
+ *
+ * Administrator class for an administrator, which is a subclass of User.
+ *
+ * Administrator has a usertype
+ */
+public class Administrator extends User {
+
+    protected UserManager.USER_TYPE userType;
+    protected String firstName;
+    protected String lastName;
+    protected String email;
+
+    /**
+     * Creates an Administrator object.
+     *
+     * @param firstName         String represents the first name of the User.
+     * @param lastName        String represents the last name of User.
+     * @param email         String represents the last name of the User.
+     */
+    public Administrator(
+                         String firstName, String lastName, String email) {
+        super(UserManager.USER_TYPE.ADMINISTRATOR, firstName, lastName, email);
+    }
+
+    /**
+     * Returns the access level of this user.
+     *
+     * @return The access level as a {@see USER_TYPE} enum.
+     */
+    public UserManager.USER_TYPE getUserType() {
+        return super.getUserType();
+    }
+
+    /**
+     * Sets this users access level to a given access level from {@see USER_TYPE}
+     *
+     * @param userType The access level as a {@see USER_TYPE} enum.
+     */
+    public void setUserType(UserManager.USER_TYPE userType) {
+        super.setUserType(userType);
+    }
+
+    /**
+     * Returns the first name of the user.
+     *
+     * @return the firstName
+     */
+    public String getFirstName() {
+        return super.getFirstName();
+    }
+
+    /**
+     * Sets the first name of the user.
+     *
+     * @param firstName the firstName to set
+     */
+    public void setFirstName(String firstName) {
+        super.setFirstName(firstName);
+    }
+
+    /**
+     * Returns the last name of the user.
+     *
+     * @return the lastName
+     */
+    public String getLastName() {
+        return super.getLastName();
+    }
+
+    /**
+     * Sets the last name of the user.
+     *
+     * @param lastName the lastName to set
+     */
+    public void setLastName(String lastName) {
+        super.setLastName(lastName);
+    }
+
+    /**
+     * Returns the email of the user.
+     *
+     * @return the email
+     */
+    public String getEmail() {
+        return super.getEmail();
+    }
+
+    /**
+     * Sets the email of the user.
+     *
+     * @param email the email to set
+     */
+    public void setEmail(String email) {
+        super.setEmail(email);
+    }
+
+    /**
+     * Returns information pertaining to client.
+     *
+     * @param client the client of which info will be shown.
+     */
+    public String viewClientInfo(Client client) {
+        return client.toString();
+    }
+
+    /**
+     * Books itinerary for client.
+     *
+     * @param client the client who will book itinerary.
+     * @param itinerary the itinerary that will be booked.
+     */
+    public void bookForClient(Client client, Itinerary itinerary) {
+        client.bookItinerary(itinerary);
+    }
+
+    /**
+     * Edits client's first name.
+     *
+     * @param client the client whose first name will be changed
+     * @param firstName the name that will be attributed to client.
+     */
+    public void editClientFirstName(Client client, String firstName) {
+        client.setFirstName(firstName);
+    }
+
+    /**
+     * Edits client's last name.
+     *
+     * @param client the client whose last name will be changed
+     * @param lastName the name that will be attributed to client.
+     */
+    public void editClientLastName(Client client, String lastName) {
+        client.setLastName(lastName);
+
+    }
+
+    /**
+     * Edits client's email.
+     *
+     * @param client the client whose email will be changed
+     * @param email the email that will be attributed to client.
+     */
+    public void editClientemail(Client client, String email)  {
+
+        client.setEmail(email);
+
+    }
+
+    /**
+     * Edits client's address.
+     *
+     * @param client the client whose address will be changed
+     * @param address the address that will be attributed to client.
+     */
+    public void editClientAddress (Client client, String address)
+    {
+        client.setAddress(address);
+    }
+
+    /**
+     * Edits client's credit card number.
+     *
+     * @param client the client whose credit card number will be changed
+     * @param creditCard the credit card number that will be attributed to client.
+     */
+    public void editClientCreditCardNumber(Client client, String creditCard)
+    {client.setCreditCardNumber(creditCard);}
+
+    /**
+     * Edits client's credit card's expiry date.
+     *
+     * @param client the client whose credit card's expiry date will be changed
+     * @param expiryDate the expiry date that will be attributed to client's credit card.
+     */
+    public void editClientExpiryDate(Client client, Date expiryDate)  {
+        client.setExpiryDate(expiryDate);
+    }
+}

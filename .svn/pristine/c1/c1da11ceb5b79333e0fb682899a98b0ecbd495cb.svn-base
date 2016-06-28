@@ -1,0 +1,61 @@
+package group730.bookingclient.misc;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+
+import group730.bookingclient.R;
+import group730.bookingclient.core.entities.Itinerary;
+
+public class BookingAdapter extends ArrayAdapter<Itinerary> {
+
+    private ArrayList<Itinerary> mBookingList;
+    private Context context;
+
+    public BookingAdapter(Context context, ArrayList<Itinerary> bookingList) {
+        super(context, R.layout.row_layout_bookings, bookingList);
+        this.mBookingList = bookingList;
+        this.context = context;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+
+        Itinerary itinerary = mBookingList.get(position);
+
+        BookingItemHolder holder = new BookingItemHolder();
+
+        if (convertView == null) {
+            LayoutInflater inflater;
+            inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+            convertView = inflater.inflate(R.layout.row_layout_bookings, parent, false);
+
+            holder.mTripOverview = (TextView) convertView.findViewById(R.id.trip_overview);
+            holder.mDepartureDate = (TextView) convertView.findViewById(R.id.departureDate);
+            holder.mArrivalDate = (TextView) convertView.findViewById(R.id.arrivalDate);
+            holder.mTravelTime = (TextView) convertView.findViewById(R.id.travelTime);
+            holder.mTotalCost = (TextView) convertView.findViewById(R.id.totalCost);
+            holder.mTotalStops = (TextView) convertView.findViewById(R.id.totalStops);
+
+            convertView.setTag(holder);
+        } else {
+            holder = (BookingItemHolder) convertView.getTag();
+        }
+
+        holder.mTripOverview.setText(itinerary.getOrigin() + " -> " + itinerary.getDestination());
+        holder.mDepartureDate.setText("Departure: " + itinerary.getDepartureDateTime().toString());
+        holder.mArrivalDate.setText("Arrival: " + itinerary.getArrivalDateTime().toString());
+        holder.mTravelTime.setText("Travel Time: " + itinerary.getTravelTime());
+        holder.mTotalCost.setText(String.format("Cost: %.2f", itinerary.getCost()));
+        holder.mTotalStops.setText(itinerary.getConnectingFlights().size() + " Stops");
+
+        return convertView;
+    }
+
+}

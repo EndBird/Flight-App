@@ -1,0 +1,162 @@
+package group730.bookingclient.fragments;
+
+import android.app.Activity;
+import android.net.Uri;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.ContextMenu;
+import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import group730.bookingclient.R;
+import group730.bookingclient.core.entities.Client;
+import group730.bookingclient.core.entities.Flight;
+import group730.bookingclient.core.entities.Itinerary;
+import group730.bookingclient.core.services.UserManager;
+import group730.bookingclient.misc.BookingAdapter;
+
+
+/**
+ * A simple {@link Fragment} subclass.
+ * Activities that contain this fragment must implement the
+ * {@link BookingsFragment.OnFragmentInteractionListener} interface
+ * to handle interaction events.
+ * Use the {@link BookingsFragment#newInstance} factory method to
+ * create an instance of this fragment.
+ */
+public class BookingsFragment extends Fragment {
+
+    private ListView mBookingsList;
+
+    private OnFragmentInteractionListener mListener;
+
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @return A new instance of fragment BookingsFragment.
+     */
+    public static BookingsFragment newInstance() {
+        BookingsFragment fragment = new BookingsFragment();
+
+        return fragment;
+    }
+
+    public BookingsFragment() {
+        // Required empty public constructor
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_bookings, container, false);
+
+        TextView mLabelNotEditable = (TextView) view.findViewById(R.id.label_not_editable);
+        TextView mBookingsForHeader = (TextView) view.findViewById(R.id.booking_for);
+        mBookingsList = (ListView) view.findViewById(R.id.bookings_list);
+
+        if (UserDetailsFragment.getEditableUser().getUserType() == UserManager.USER_TYPE.CLIENT) {
+            Client currentUser = (Client) UserDetailsFragment.getEditableUser();
+
+            mBookingsForHeader.setText(getText(R.string.label_bookings_for) + " " +
+                    currentUser.getFirstName() + " " + currentUser.getLastName());
+
+
+            ArrayList<Itinerary> itineraries = (ArrayList) currentUser.getBookedItineraries();
+
+            List<Flight> flights = new ArrayList<>();
+            flights.add(new Flight(0, new Date(21435678), new Date(21485678), "Test", "Toronto", "Las Vegas", 100, 200));
+
+            itineraries.add(new Itinerary(flights));
+
+            BookingAdapter bookedTrips;
+            bookedTrips = new BookingAdapter(getActivity().getApplicationContext(), itineraries);
+
+            mBookingsList.setAdapter(bookedTrips);
+
+            registerForContextMenu(mBookingsList);
+
+            mLabelNotEditable.setVisibility(View.GONE);
+            mBookingsForHeader.setVisibility(View.VISIBLE);
+            mBookingsList.setVisibility(mBookingsForHeader.getVisibility());
+        } else {
+            mLabelNotEditable.setVisibility(View.VISIBLE);
+            mBookingsForHeader.setVisibility(View.VISIBLE);
+            mBookingsList.setVisibility(mBookingsForHeader.getVisibility());
+        }
+        return view;
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        if (v.getId() == R.id.bookings_list) {
+            MenuInflater inflater = getActivity().getMenuInflater();
+            inflater.inflate(R.menu.context_menu_booking_list, menu);
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        if (item.getItemId() == R.id.delete) {
+            ArrayAdapter<Itinerary> itineraries = (ArrayAdapter) mBookingsList.getAdapter();
+            itineraries.remove(itineraries.getItem(info.position));
+
+            Toast.makeText(getActivity(), "Removed booking.", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mListener = (OnFragmentInteractionListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    /**
+     * This interface must be implemented by activities that contain this
+     * fragment to allow an interaction in this fragment to be communicated
+     * to the activity and potentially other fragments contained in that
+     * activity.
+     * <p/>
+     * See the Android Training lesson <a href=
+     * "http://developer.android.com/training/basics/fragments/communicating.html"
+     * >Communicating with Other Fragments</a> for more information.
+     */
+    public interface OnFragmentInteractionListener {
+        // TODO: Update argument type and name
+        public void onFragmentInteraction(Uri uri);
+    }
+
+}

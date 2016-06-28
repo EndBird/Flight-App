@@ -1,0 +1,109 @@
+package group730.bookingclient.core.entities;
+
+import java.util.Date;
+import java.util.List;
+import java.util.ArrayList;
+
+import group730.bookingclient.core.services.DataManager;
+import group730.bookingclient.core.services.UserManager;
+import group730.bookingclient.core.utils.DateTimeUtils;
+
+
+public class Client extends User {
+
+    private String address;
+    private String creditCardNumber;
+    private Date expiryDate;
+    private List<Itinerary> bookedItineraries;
+
+
+    public Client(String firstName, String lastName, String email,
+                  String address, String creditCardNumber, Date expiryDate) {
+        super(UserManager.USER_TYPE.CLIENT, firstName, lastName, email);
+        this.address = address;
+        this.creditCardNumber = creditCardNumber;
+        this.expiryDate = expiryDate;
+        this.bookedItineraries = new ArrayList<>();
+    }
+
+    /**
+     * @return the address
+     */
+    public String getAddress() {
+        return address;
+    }
+
+    /**
+     * @param address the address to set
+     */
+    public void setAddress(String address) {
+        this.address = address;
+        UserManager.getInstance().saveUsers();
+    }
+
+    /**
+     * @return the creditCardNumber
+     */
+    public String getCreditCardNumber() {
+        return creditCardNumber;
+    }
+
+    /**
+     * @param creditCardNumber the creditCardNumber to set
+     */
+    public void setCreditCardNumber(String creditCardNumber) {
+        this.creditCardNumber = creditCardNumber;
+        UserManager.getInstance().saveUsers();
+    }
+
+    /**
+     * @return the expiryDate
+     */
+    public Date getExpiryDate() {
+        return expiryDate;
+    }
+
+    /**
+     * @param expiryDate the expiryDate to set
+     */
+    public void setExpiryDate(Date expiryDate) {
+        this.expiryDate = expiryDate;
+        UserManager.getInstance().saveUsers();
+    }
+
+    /**
+     * @param itinerary the itinerary to add to the list of User's booked itineraries.
+     */
+    public void bookItinerary(Itinerary itinerary) {
+        this.bookedItineraries.add(itinerary);
+        UserManager.getInstance().saveUsers();
+
+    }
+
+    /**
+     * @param itinerary the itinerary to remove from the list of User's booked itineraries.
+     */
+    public void unBookItinerary(Itinerary itinerary) {
+        this.bookedItineraries.remove(itinerary);
+        UserManager.getInstance().saveUsers();
+    }
+
+    /**
+     * @return the bookedItineraries
+     */
+    public List<Itinerary> getBookedItineraries() {
+        return bookedItineraries;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s,%s,%s,%s,%s,%s",
+                lastName,
+                firstName,
+                email,
+                address,
+                creditCardNumber,
+                DateTimeUtils.convertDateToString(expiryDate));
+    }
+}
+

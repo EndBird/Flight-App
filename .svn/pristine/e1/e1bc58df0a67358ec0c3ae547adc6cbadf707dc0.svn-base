@@ -1,0 +1,57 @@
+Friday, November 27, 2015
+Start Time: 9:00AM
+Finish Time: 2PM
+
+Accomplished:
+Minh, Karn, Michael, Bavneet:
+- Set up Android Studio. 
+- Checked out a working copy of the start files in Android Studio.
+- Discussed the basic layout of the application.
+- Made some changes to the backend (PII) code.
+
+Next meeting: Monday, November 30, 2015.
+
+-------------------------------------------------------------------------
+
+Monday, November 30, 2015
+Start Time: 2:00PM
+Finish Time: 7:00PM
+
+Accomplished:
+Michael - Worked on java docs and Client class.
+Bavneet - Worked on java docs.
+Karn - Worked on backend/frontend of code.
+Minh - Worked on backend/frontend of code.
+
+Next meeting: Thursday, December 3, 2015
+-------------------------------------------------------------------------
+
+Thursday, December 3, 2015
+Start Time: 12:30PM
+Finish Time: 2:00PM
+
+Planning Meeting:
+Karn - UI and additional tasks
+Michael - CRC Cards
+Bavneet - Settings and Crash Saving
+Minh - Load Data on startup
+
+Next meeting: Tuesday, December 8, 2015
+-------------------------------------------------------------------------
+
+Monday, December 8, 2015
+Start Time: 3:00PM
+Finish Time: 4:00PM
+
+Status Meeting: What is left to do:
+- Adding itineraries to users from search - Karn 
+- Application save on crash. - Bavneet
+- CRC cards. - Michael
+- Java docs. - Michael
+- Meetings.txt - Michael
+- Final readme.txt  - Minh
+- validation on cdf computers. - Minh
+- Date and travel time formatting. - Minh
+- renaming all variables to android code guidelines - Karn
+- When updating the email of a user the hasmaps key foes not update (solution is to remove    and re add the user). - Bavneet
+- File uploading needs error checks. - Karn 

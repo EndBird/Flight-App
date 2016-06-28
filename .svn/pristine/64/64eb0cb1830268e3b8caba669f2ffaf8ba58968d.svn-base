@@ -1,0 +1,47 @@
+package group730.bookingclient.core.entities;
+
+import java.util.Date;
+import java.util.List;
+
+import group730.bookingclient.core.services.DataManager;
+import group730.bookingclient.core.services.UserManager;
+
+/**
+ * Created by HuynhsComputer on 2015-11-27.
+ * <p/>
+ * <p/>
+ * Administrator class for an administrator, which is a subclass of User.
+ * <p/>
+ * Administrator has a usertype
+ */
+public class Administrator extends User {
+
+    /**
+     * Creates an Administrator object.
+     *
+     * @param firstName String represents the first name of the Administrator.
+     * @param lastName  String represents the last name of Administrator.
+     * @param email     String represents the last name of the Administrator.
+     * @param password  String represents the password of the Administrator.
+     */
+    public Administrator(
+            String firstName, String lastName, String email, String password) {
+        super(UserManager.USER_TYPE.ADMINISTRATOR, firstName, lastName, email, password);
+    }
+    
+    /**
+     * Returns String representation of this administrator in the following format:
+     * lastName,firstName,email
+     *
+     * @return A string representation of administrator.
+     */
+    @Override
+    public String toString() {
+        return String.format("%s,%s,%s",
+                lastName,
+                firstName,
+                email);
+    }
+
+
+}

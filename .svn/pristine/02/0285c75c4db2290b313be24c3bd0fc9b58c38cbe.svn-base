@@ -1,0 +1,245 @@
+package group730.bookingclient.core.entities;
+
+import java.io.Serializable;
+import java.text.DecimalFormat;
+import java.util.Date;
+
+import group730.bookingclient.core.utils.DateTimeUtils;
+
+/**
+ * A flight object details the information of a flight.
+ * Parameters include the flight number, departure date and time, arrival date
+ * and time, name of airline, origin of departure, destination and the cost of
+ * this flight.
+ */
+public class Flight implements Serializable {
+
+    private int flightNumber;
+    private Date departureDateTime;
+    private Date arrivalDateTime;
+    private String airline;
+    private String origin;
+    private String destination;
+    private double cost;
+    private int numSeats;
+
+    /**
+     * Assigns the default values of a new instance of the Flight object.
+     *
+     * @param flightNumber      int Represents the flight number of the Flight.
+     * @param departureDateTime Date Represents the departure date and time of
+     *                          the Flight.
+     * @param arrivalDateTime   Date Represents the arrival date and time of the
+     *                          Flight.
+     * @param airline           String Represents the airline of the Flight.
+     * @param origin            String Represents the origin of the Flight.
+     * @param destination       String Represents the destination of the Flight.
+     * @param cost              double Represents the cost of the Flight.
+     * @param numSeats			int Represents the number of seats available
+     * 							for the Flight
+     */
+    public Flight(int flightNumber, Date departureDateTime,
+                  Date arrivalDateTime, String airline, String origin,
+                  String destination, double cost, int numSeats) {
+
+        this.flightNumber = flightNumber;
+        this.departureDateTime = departureDateTime;
+        this.arrivalDateTime = arrivalDateTime;
+        this.airline = airline;
+        this.origin = origin;
+        this.destination = destination;
+        this.cost = cost;
+        this.numSeats = numSeats;
+    }
+
+    /**
+     * Returns the flight number of this flight.
+     *
+     * @return Integer representing the flight number.
+     */
+    public int getFlightNumber() {
+        return flightNumber;
+    }
+
+    /**
+     * Re/assigns the flight number of this flight.
+     *
+     * @param flightNumber Integer representing the flight number.
+     */
+    public void setFlightNumber(int flightNumber) {
+        this.flightNumber = flightNumber;
+    }
+
+    /**
+     * Returns the time at which this flight departs.
+     *
+     * @return Date object representing the date and/or time.
+     */
+    public Date getDepartureDateTime() {
+        return departureDateTime;
+    }
+
+    /**
+     * Assigns a departure Date to a flight.
+     *
+     * @param departureDateTime Date object representing the departure date and/
+     *                          or time.
+     */
+    public void setDepartureDateTime(Date departureDateTime) {
+        this.departureDateTime = departureDateTime;
+    }
+
+    /**
+     * Returns the time at which this flight arrives at its destination.
+     *
+     * @return Date object representing the date and/or time.
+     */
+    public Date getArrivalDateTime() {
+        return arrivalDateTime;
+    }
+
+    /**
+     * Assigns the arrival time of this flight at its destination.
+     *
+     * @param arrivalDateTime Date object representing the arrival date and/or
+     *                        time.
+     */
+    public void setArrivalDateTime(Date arrivalDateTime) {
+        this.arrivalDateTime = arrivalDateTime;
+    }
+
+    /**
+     * Returns the name of the airline that is operating this flight.
+     *
+     * @return A string representing the name.
+     */
+    public String getAirline() {
+        return airline;
+    }
+
+    /**
+     * Assigns the name of the airline that is operating this flight.
+     *
+     * @param airline The name of the airline as a string.
+     */
+    public void setAirline(String airline) {
+        this.airline = airline;
+    }
+
+    /**
+     * Returns the origin of departure.
+     *
+     * @return An string representing the origin.
+     */
+    public String getOrigin() {
+        return origin;
+    }
+
+    /**
+     * Assigns the origin of departure.
+     *
+     * @param origin The origin of departure as a string.
+     */
+    public void setOrigin(String origin) {
+        this.origin = origin;
+    }
+
+    /**
+     * Returns the destination of this flight.
+     *
+     * @return An string representing the destination.
+     */
+    public String getDestination() {
+        return destination;
+    }
+
+
+    /**
+     * Assigns the destination of this flight.
+     *
+     * @param destination The destination as a string.
+     */
+    public void setDestination(String destination) {
+        this.destination = destination;
+    }
+
+    /**
+     * Returns the cost of the flight.
+     *
+     * @return Double representing the cost of the flight.
+     */
+    public double getCost() {
+        return cost;
+    }
+
+    /**
+     * Assigns the cost of the flight.
+     *
+     * @param cost Cost of the flight as a Double.
+     */
+    public void setCost(double cost) {
+        this.cost = cost;
+    }
+    
+    /**
+     * Returns the number of available seats of this flight.
+     *
+     * @return Integer representing the number of seats
+     * available.
+     */
+    public int getNumSeats() {
+        return numSeats;
+    }
+
+    /**
+     * Re/assigns the number of available seats of this flight.
+     *
+     * @param numSeats Integer representing the number of available
+     * seats.
+     */
+    public void setNumSeats(int numSeats) {
+        this.numSeats = numSeats;
+    }
+
+    /**
+     * Returns the duration of the flight in milliseconds.
+     *
+     * @return A long representation of the duration in milliseconds.
+     */
+    
+    public long getTimeInMillis() {
+        return (this.arrivalDateTime.getTime()
+                - this.departureDateTime.getTime());
+    }
+
+    /**
+     * Leverages the overloaded toString function and converts the flight in the
+     * following format:
+     * Number,DepartureDateTime,ArrivalDateTime,Airline,Origin,Destination,Cost
+     *
+     * @return A string representation of the flight.
+     */
+    public String toString() {
+        return this.toString(true);
+    }
+
+    /**
+     * Return String representation of this flight in the following format:
+     * Number,DepartureDateTime,ArrivalDateTime,Airline,Origin,Destination,Cost
+     *
+     * @param showCost Indicates whether the string representation should
+     *                 include the cost of the flight.
+     * @return A string representation of the flight.
+     */
+    public String toString(boolean showCost) {
+        return String.format("%s,%s,%s,%s,%s,%s%s",
+                flightNumber,
+                DateTimeUtils.convertDateTimeToString(departureDateTime),
+                DateTimeUtils.convertDateTimeToString(arrivalDateTime),
+                airline,
+                origin,
+                destination,
+                showCost ? "," + new DecimalFormat("0.00").format(cost) : "");
+    }
+}
+

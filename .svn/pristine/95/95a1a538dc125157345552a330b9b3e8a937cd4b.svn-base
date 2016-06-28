@@ -1,0 +1,234 @@
+package group730.bookingclient.core.services;
+
+import group730.bookingclient.core.entities.Client;
+import group730.bookingclient.core.entities.Flight;
+import group730.bookingclient.core.entities.User;
+import group730.bookingclient.core.entities.Client;
+import group730.bookingclient.core.utils.DateTimeUtils;
+
+import java.io.*;
+import java.util.*;
+
+/**
+ * Manages all external data importing and exporting a collection of flights
+ * and/or a dictionary of users.
+ * <p>
+ * Additionally, this class manages all parsing from CSV files into a collection
+ * of flights and/or a dictionary of users.
+ */
+public class DataManager {
+
+    private final String USERS_FILE_PATH = "users.ser";
+    private final String FLIGHTS_FILE_PATH = "flights.ser";
+
+    private static DataManager dataManager;
+
+    /**
+     * Returns an static instance of this class.
+     *
+     * @return
+     */
+    public static DataManager getInstance() {
+        if (dataManager == null)
+            dataManager = new DataManager();
+        return dataManager;
+    }
+
+    // Primary constructor ensures file paths exists before access. Creates if
+    // not found.
+    private DataManager() {
+        validateFilePaths();
+    }
+
+    private void validateFilePaths() {
+        try {
+            File usersFile = new File(USERS_FILE_PATH);
+            if (!usersFile.exists()) {
+                usersFile.createNewFile();
+            }
+
+            File flightsFile = new File(FLIGHTS_FILE_PATH);
+            if (!flightsFile.exists()) {
+                flightsFile.createNewFile();
+            }
+        } catch (IOException e) {
+
+        }
+    }
+
+    /**
+     * Deserialize collection of saved flights from file.
+     *
+     * @return An collection of loaded flights.
+     */
+    public List<Flight> loadFlights() {
+        List<Flight> loadedFlights = new ArrayList<>();
+
+        try {
+            loadedFlights = (List<Flight>) deserialize(FLIGHTS_FILE_PATH);
+        } catch (IOException | ClassNotFoundException e) {
+            // Failed to find the path to file, or the class defining the object
+            // that the data is being de-serialized to is non-existent.
+            e.printStackTrace();
+        }
+
+        return loadedFlights;
+    }
+
+    /**
+     * Serialize collection of flights to file.
+     *
+     * @param flights The collection of flights that are to be saved.
+     */
+    public void saveFlights(List<Flight> flights) {
+        try {
+            serialize(flights, FLIGHTS_FILE_PATH);
+        } catch (IOException e) {
+            // Failed to find the path to file, or the class defining the object
+            // that the data is being de-serialized to is non-existent.
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Deserialize collection of saved users from a file.
+     *
+     * @return An dictionary of loaded flights.
+     */
+    public Map<String, User> loadUsers() {
+        Map<String, User> loadedUsers = new HashMap<>();
+
+        try {
+            loadedUsers = (Map<String, User>) deserialize(USERS_FILE_PATH);
+        } catch (IOException | ClassNotFoundException e) {
+            // Failed to find the path to file, or the class defining the object
+            // that the data is being de-serialized to is non-existent.
+            e.printStackTrace();
+        }
+
+        return loadedUsers;
+    }
+
+    /**
+     * Serialize dictionary of users to file.
+     *
+     * @param users The dictionary of users that are to be saved.
+     */
+    public void saveUsers(Map<String, User> users) {
+        try {
+            serialize(users, USERS_FILE_PATH);
+        } catch (IOException e) {
+            // Failed to find the path to file, or the class defining the object
+            // that the data is being de-serialized to is non-existent.
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Parse a collection of flights from a given file with comma separated
+     * values. Format is as follows:
+     * Number,DepartureDateTime,ArrivalDateTime,Airline,Origin,Destination,Price
+     *
+     * @param pathToFile The path to the file that is being parsed.
+     * @return A collection of flights.
+     */
+    public List<Flight> parseFlights(String pathToFile) {
+        List<Flight> parsedFlights = new ArrayList<>();
+
+        try {
+            Scanner sc = new Scanner(new File(pathToFile));
+
+            while (sc.hasNextLine()) {
+                String line = sc.nextLine();
+
+                String[] lineValues = line.split(",");
+
+                int flightNumber = Integer.parseInt(lineValues[0]);
+                Date departureDateTime = DateTimeUtils.convertToDateTime(
+                        lineValues[1]);
+                Date arrivalDateTime = DateTimeUtils.convertToDateTime(
+                        lineValues[2]);
+                String airline = lineValues[3];
+                String origin = lineValues[4];
+                String destination = lineValues[5];
+                double cost = Double.parseDouble(lineValues[6]);
+
+                Flight newFlight = new Flight(flightNumber,
+                        departureDateTime,
+                        arrivalDateTime,
+                        airline,
+                        origin,
+                        destination,
+                        cost, 0);
+
+                parsedFlights.add(newFlight);
+            }
+        } catch (IOException e) {
+
+        }
+
+        return parsedFlights;
+    }
+
+    /**
+     * Parse a collection of users from a given file with comma separated
+     * values. Format is as follows:
+     * LastName,FirstNames,Email,Address,CreditCardNumber,ExpiryDate
+     *
+     * @param pathToFile The path to the file that is being parsed.
+     * @return A collection of users.
+     */
+    public List<User> parseUsers(String pathToFile) {
+        List<User> parsedUsers = new ArrayList<>();
+
+        try {
+            Scanner sc = new Scanner(new File(pathToFile));
+
+            while (sc.hasNextLine()) {
+                String line = sc.nextLine();
+                String[] lineValues = line.split(",");
+
+                String lastName = lineValues[0];
+                String firstName = lineValues[1];
+                String email = lineValues[2];
+                String address = lineValues[3];
+                String creditCardNumber = lineValues[4];
+                Date expiry = DateTimeUtils.convertToDate(lineValues[5]);
+
+                Client newUser = new Client(firstName, lastName, email, address,
+                        creditCardNumber, expiry);
+
+                parsedUsers.add(newUser);
+            }
+        } catch (IOException e) {
+
+        }
+
+        return parsedUsers;
+    }
+
+    // Handles generic serialization of a given object to a file.
+    private void serialize(Object data, String pathToFile) throws IOException {
+
+        FileOutputStream fileStream = new FileOutputStream(pathToFile);
+        ObjectOutputStream outStream = new ObjectOutputStream(fileStream);
+        outStream.writeObject(data);
+
+        fileStream.close();
+        outStream.close();
+    }
+
+    // Handles generic deserialization of a given object from a file.
+    private Object deserialize(String pathToFile) throws IOException,
+            ClassNotFoundException {
+
+        FileInputStream fileStream = new FileInputStream(pathToFile);
+        ObjectInputStream objectStream = new ObjectInputStream(fileStream);
+        Object data = objectStream.readObject();
+
+        objectStream.close();
+        fileStream.close();
+
+        return data;
+    }
+}

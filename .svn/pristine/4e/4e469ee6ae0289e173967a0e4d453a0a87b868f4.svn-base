@@ -1,0 +1,73 @@
+package group730.bookingclient.misc;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+
+import group730.bookingclient.R;
+import group730.bookingclient.core.entities.Itinerary;
+import group730.bookingclient.core.utils.DateTimeUtils;
+
+public class BookingAdapter extends ArrayAdapter<Itinerary> {
+
+    private ArrayList<Itinerary> mBookingList;
+    private Context context;
+
+    public BookingAdapter(Context context, ArrayList<Itinerary> bookingList) {
+        super(context, R.layout.row_layout_bookings, bookingList);
+        this.mBookingList = bookingList;
+        this.context = context;
+    }
+
+    @Override
+    public View getView(int position, View v, ViewGroup parent) {
+
+        Itinerary itinerary = mBookingList.get(position);
+
+        BookingItemViewModel vm = new BookingItemViewModel();
+
+        if (v == null) {
+            LayoutInflater inflater;
+            inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+            v = inflater.inflate(R.layout.row_layout_bookings, parent, false);
+
+            vm.mTripOverview = (TextView) v.findViewById(R.id.tripOverview);
+            vm.mDepartureDate = (TextView) v.findViewById(R.id.departureDate);
+            vm.mArrivalDate = (TextView) v.findViewById(R.id.arrivalDate);
+            vm.mTravelTime = (TextView) v.findViewById(R.id.travelTime);
+            vm.mTotalCost = (TextView) v.findViewById(R.id.cost);
+            vm.mTotalStops = (TextView) v.findViewById(R.id.totalStops);
+
+            v.setTag(vm);
+        } else {
+            vm = (BookingItemViewModel) v.getTag();
+        }
+
+        vm.mTripOverview.setText(itinerary.getOrigin() + " -> "
+                + itinerary.getDestination());
+        vm.mDepartureDate.setText("Departure: "
+                + DateTimeUtils.convertDateTimeToString(
+                itinerary.getDepartureDateTime()));
+        vm.mArrivalDate.setText("Arrival: "
+                + DateTimeUtils.convertDateTimeToString(
+                itinerary.getArrivalDateTime()));
+        vm.mTravelTime.setText("Travel Time: "
+                + DateTimeUtils.convertTimeToString(itinerary.getTravelTime()));
+        vm.mTotalCost.setText(String.format("Cost: %.2f", itinerary.getCost()));
+        vm.mTotalStops.setText(itinerary.getConnectingFlights().size()
+                + " Stops");
+
+        return v;
+    }
+
+    public ArrayList<Itinerary> getItems() {
+        return this.mBookingList;
+    }
+
+}

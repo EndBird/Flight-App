@@ -1,0 +1,161 @@
+package core.services;
+
+import core.entities.Flight;
+import core.utils.DateTimeUtils;
+import core.utils.FlightsGraph;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+/**
+ * This class manages all the Flight related operations including
+ */
+public class FlightManager {
+
+    private static FlightsGraph flightsGraph;
+
+    /**
+     * Return the static instance of the FlightsGraph object if it is
+     * initialized or assigns and returns the instance.
+     *
+     * @return the static instance of FlightsGraph.
+     */
+    public static FlightsGraph getFlightsGraph() {
+        if (flightsGraph == null)
+            flightsGraph = new FlightsGraph(new ArrayList<>());
+        return flightsGraph;
+    }
+
+    /**
+     * Set the static instance of the flightsGraph object to a FlightGraph
+     * object instance.
+     *
+     * @param fg An instance of the FlightGraph object.
+     */
+    public static void setFlightsGraph(FlightsGraph fg) {
+        flightsGraph = fg;
+    }
+
+    /**
+     * Return a collection of flights departing from the origin on a given Date
+     * date.
+     *
+     * @param date   The Date object representing the date and time at which a
+     *               flight departs.
+     * @param origin The location from which a flight is departing.
+     * @return Collection of flights that correspond to flights leaving a given
+     * departure location at a given Date date.
+     */
+    public static List<Flight> getFlightsFrom(String date, String origin) {
+        List<Flight> flightsFrom = new ArrayList<>();
+
+        for (Flight flight : flightsGraph.getFlights()) {
+            if (DateTimeUtils.convertDateToString(
+                    flight.getDepartureDateTime()).equals(date)
+                    && flight.getOrigin().equals(origin)) {
+
+                flightsFrom.add(flight);
+            }
+        }
+
+        return flightsFrom;
+    }
+
+
+    // Return a collection of flights arriving at the destination from the
+    // origin on a given Date date.
+    private static List<Flight> getFlightsTo(List<Flight> flights,
+                                             String destination) {
+
+        List<Flight> flightsTo = new ArrayList<>();
+
+        for (Flight flight : flights) {
+            if (flight.getDestination().equals(destination)) {
+                flightsTo.add(flight);
+            }
+        }
+
+        return flightsTo;
+    }
+
+    /**
+     * Return a collection of flights arriving at the destination from the
+     * origin on a given Date date.
+     *
+     * @param date        The Date object representing the date and time
+     *                    at which a flight departs.
+     * @param origin      The location from which a flight is departing.
+     * @param destination The location at which a flight is arriving.
+     * @return Collection of flights that correspond to flights leaving a given
+     * departure location at a given Date date and arriving at the destination.
+     */
+    public static List<Flight> getFlightsFromTo(String date,
+                                                String origin,
+                                                String destination) {
+        List<Flight> flights = getFlightsFrom(date, origin);
+
+        return getFlightsTo(flights, destination);
+    }
+
+    /**
+     * Sorts a collection of flights from lowest to highest in cost.
+     * A lambda expression defining the comparator allows the costs of an
+     * individual itinerary to be assessed.
+     *
+     * @param flights the collection of flights that are being sorted.
+     */
+    public static void sortCostLow(List<Flight> flights) {
+        Collections.sort(flights, (f1, f2) -> {
+            double costDiff = f2.getCost() - f1.getCost();
+
+            if (costDiff == 0)
+                return 0;
+            else
+                return costDiff > 0 ? 1 : -1;
+        });
+    }
+
+    /**
+     * Leverages the {@see sortCostLow} function to sort a collection of
+     * flights from highest to lowest in cost.
+     *
+     * @param flights the collection of flights that are being sorted.
+     */
+    public static void sortCostHigh(List<Flight> flights) {
+        sortCostLow(flights);
+
+        Collections.reverse(flights);
+    }
+
+    /**
+     * Sorts a collection of flights from lowest to highest in time.
+     * A lambda expression defining the comparator allows the travel time of an
+     * individual itinerary to be assessed.
+     *
+     * @param flights the collection of flights that are being sorted.
+     */
+    public static void sortTimeLow(List<Flight> flights) {
+        Collections.sort(flights, (f1, f2) -> {
+            double diff = f2.getTimeInMillis() - f1.getTimeInMillis();
+
+            if (diff == 0)
+                return 0;
+            else
+                return diff > 0 ? 1 : -1;
+        });
+    }
+
+    /**
+     * Leverages the {@see sortTimeLow} function to sort a collection of
+     * flights from highest to lowest in terms of travel time.
+     *
+     * @param flights the collection of flights that are being sorted.
+     */
+    public static void sortTimeHigh(List<Flight> flights) {
+        sortTimeLow(flights);
+
+        Collections.reverse(flights);
+    }
+
+}

@@ -1,0 +1,77 @@
+<resources>
+    <string name="app_name">Booking Client</string>
+    <string name="title_activity_main">BookingClient</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_edit">Edit user</string>
+    <string name="action_search">Search</string>
+
+    <string name="user_email_tag">UserEmail</string>
+
+    <string name="title_search">Search</string>
+    <string name="title_account">Account</string>
+    <string name="title_bookings">Bookings</string>
+    <string name="title_all_flights">All flights</string>
+    <string name="title_admin_panel">Admin Panel</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_home">HomeActivity</string>
+    <string name="title_activity_settings">HomeActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <!-- User Fragment -->
+    <string name="label_first_name">FIRST NAME</string>
+    <string name="label_last_name">LAST NAME</string>
+    <string name="label_email">EMAIL</string>
+    <string name="label_password">PASSWORD</string>
+    <string name="label_address">ADDRESS</string>
+    <string name="label_credit">CREDIT CARD NUMBER</string>
+    <string name="label_ccv">CCV</string>
+    <string name="label_billing_address">BILLING ADDRESS</string>
+    <string name="button_edit">EDIT</string>
+    <string name="button_cancel">CANCEL</string>
+    <string name="button_save">SAVE</string>
+
+    <!-- Bookings Fragment -->
+    <string name="label_not_editable">This user is not editable, select another user from the account view.</string>
+    <string name="label_bookings_for">Bookings for: </string>
+    <string name="label_context_menu_delete">Delete</string>
+
+    <!-- Search Fragment -->
+    <string name="title_activity_search_results">Search Results</string>
+    <string name="label_departure_date">Departure date</string>
+    <string name="label_travel_origin">From</string>
+    <string name="label_travel_destination">To</string>
+    <string name="label_select_flights">Single flights</string>
+    <string name="label_select_trips">Trips</string>
+    <string name="button_search">Search</string>
+
+    <!-- Search Results Activity -->
+    <string name="action_filter_time_low">Duration: Shortest</string>
+    <string name="action_filter_time_high">Duration: Longest</string>
+    <string name="action_filter_cost_low">Cost: Low</string>
+    <string name="action_filter_cost_high">Cost: High</string>
+    <string name="title_user_list">Users</string>
+    <string name="title_user_detail">User Detail</string>
+
+
+    <string name="label_context_menu_edit">Edit</string>
+
+    <!-- Edit Flight Activity-->
+    <string name="title_activity_edit_flight">Edit Flight</string>
+    <string name="label_flight_number">FlIGHT NUMBER</string>
+    <string name="label_airline">AIRLINE</string>
+    <string name="label_flight_departure">DEPARTURE DATE</string>
+    <string name="label_flight_arrival">ARRIVAL DATE</string>
+    <string name="label_origin">ORIGIN</string>
+    <string name="label_destination">DESTINATION</string>
+    <string name="label_cost">DESTINATION</string>
+    <string name="label_travel_time">TRAVEL TIME</string>
+    <string name="label_available_seats">AVAILABLE SEATS</string>
+
+
+</resources>

@@ -1,0 +1,55 @@
+package group730.bookingclient;
+
+import android.content.Context;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+import group730.bookingclient.core.entities.Administrator;
+import group730.bookingclient.core.entities.Client;
+import group730.bookingclient.core.entities.User;
+
+public class BookingClient {
+
+    private static Context sContext;
+    private static BookingClient sBookingClient;
+
+    public static BookingClient GetInstance() {
+        if (sBookingClient == null)
+            sBookingClient = new BookingClient();
+        return sBookingClient;
+    }
+
+    private BookingClient() {
+        //initialize();
+    }
+
+    public void initialize(Context context) {
+        sContext = context;
+
+        generateDummmyData();
+    }
+
+    private void generateDummmyData() {
+
+        User admin = new Administrator("Root", "User", "root@root.com", "root");
+        User client0 = new Client("Karn", "Saheb", "sahebkarn@gmail.com", "test", "123 Hacker St.", "1234567890", new Date(0));
+        User client1 = new Client("Micheal", "Mah", "michael.mah@mail.utoronto.ca", "test", "123 Hacker St.", "1234567890", new Date(0));
+        User client2 = new Client("Minh", "Huynh", "huynh.minh@mail.utoronto.ca", "test", "123 Hacker St.", "1234567890", new Date(0));
+        User client3 = new Client("Bavneet", "Jhutty", "jhutty.bavneet@mail.utoronto.ca", "test", "123 Hacker St.", "1234567890", new Date(0));
+
+        Map<String, User> newUsers = new HashMap<>();
+        newUsers.put(admin.getEmail(), admin);
+        newUsers.put(client0.getEmail(), client0);
+        newUsers.put(client1.getEmail(), client1);
+        newUsers.put(client2.getEmail(), client2);
+        newUsers.put(client3.getEmail(), client3);
+
+        group730.bookingclient.core.services.UserManager.getInstance().addUsers(newUsers);
+    }
+
+    public Context getContext() {
+        return sContext;
+    }
+}

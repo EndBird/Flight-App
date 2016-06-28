@@ -1,0 +1,88 @@
+package group730.bookingclient.core.entities;
+
+import java.io.Serializable;
+
+import group730.bookingclient.core.services.UserManager;
+
+public abstract class User implements Serializable {
+
+    protected UserManager.USER_TYPE userType;
+    protected String firstName;
+    protected String lastName;
+    protected String email;
+
+    /**
+     * Creates a User object.
+     *
+     * @param userType         Enum that represents the status of tbe user.
+     * @param firstName        String represents the first name of User.
+     * @param lastName         String represents the last name of the User.
+     * @param email            String represents the email of the User.
+     */
+    public User(UserManager.USER_TYPE userType, String firstName, String lastName, String email) {
+        this.userType = userType;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+    }
+
+    /**
+     * Returns the access level of this user.
+     *
+     * @return The access level as a {@see USER_TYPE} enum.
+     */
+    public UserManager.USER_TYPE getUserType() {
+        return userType;
+    }
+
+    /**
+     * Sets this users access level to a given access level from {@see USER_TYPE}
+     *
+     * @param userType The access level as a {@see USER_TYPE} enum.
+     */
+    public void setUserType(UserManager.USER_TYPE userType) {
+        this.userType = userType;
+    }
+
+    /**
+     * @return the firstName
+     */
+    public String getFirstName() {
+        return firstName;
+    }
+
+    /**
+     * @param firstName the firstName to set
+     */
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    /**
+     * @return the lastName
+     */
+    public String getLastName() {
+        return lastName;
+    }
+
+    /**
+     * @param lastName the lastName to set
+     */
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    /**
+     * @return the email
+     */
+    public String getEmail() {
+        return email;
+    }
+
+    /**
+     * @param email the email to set
+     */
+    public void setEmail(String email) {
+        this.email = email;
+    }
+}

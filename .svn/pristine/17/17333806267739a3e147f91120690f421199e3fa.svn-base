@@ -1,0 +1,63 @@
+package group730.bookingclient.misc;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+
+import group730.bookingclient.R;
+import group730.bookingclient.core.entities.Flight;
+
+public class FlightsAdapter extends ArrayAdapter<Flight> {
+
+    private ArrayList<Flight> mFlightsList;
+    private Context context;
+
+    public FlightsAdapter(Context context, ArrayList<Flight> flightsList) {
+        super(context, R.layout.row_layout_bookings, flightsList);
+        this.mFlightsList = flightsList;
+        this.context = context;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+
+        Flight flight = mFlightsList.get(position);
+
+        FlightItemHolder holder = new FlightItemHolder();
+
+        if (convertView == null) {
+            LayoutInflater inflater;
+            inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+            convertView = inflater.inflate(R.layout.row_layout_flights, parent, false);
+
+            holder.mAirline = (TextView) convertView.findViewById(R.id.airline);
+            holder.mFlightNumber = (TextView) convertView.findViewById(R.id.flightNumber);
+            holder.mTripOverview = (TextView) convertView.findViewById(R.id.tripOverview);
+            holder.mDepartureDate = (TextView) convertView.findViewById(R.id.departureDate);
+            holder.mArrivalDate = (TextView) convertView.findViewById(R.id.arrivalDate);
+            holder.mTravelTime = (TextView) convertView.findViewById(R.id.travelTime);
+            holder.mCost = (TextView) convertView.findViewById(R.id.cost);
+
+            convertView.setTag(holder);
+        } else {
+            holder = (FlightItemHolder) convertView.getTag();
+        }
+
+        holder.mAirline.setText("Airline: " + flight.getAirline());
+        holder.mFlightNumber.setText("Flight number: " + flight.getFlightNumber());
+        holder.mTripOverview.setText(flight.getOrigin() + " -> " + flight.getDestination());
+        holder.mDepartureDate.setText("Departure: " + flight.getDepartureDateTime().toString());
+        holder.mArrivalDate.setText("Arrival: " + flight.getArrivalDateTime().toString());
+        holder.mTravelTime.setText("Travel Time: " + flight.getTimeInMillis());
+        holder.mCost.setText(String.format("Cost: %.2f", flight.getCost()));
+
+        return convertView;
+    }
+
+}

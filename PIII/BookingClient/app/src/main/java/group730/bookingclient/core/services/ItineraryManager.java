@@ -1,0 +1,81 @@
+package group730.bookingclient.core.services;
+
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+import group730.bookingclient.core.entities.Itinerary;
+
+/**
+ * Provides extension methods for collections of itineraries.
+ * <p/>
+ * Extensions include, sorting and searching.
+ */
+public class ItineraryManager {
+
+    /**
+     * Sorts a collection of itineraries from lowest to highest in cost.
+     * A lambda expression defining the comparator allows the costs of an
+     * individual itinerary to be assessed.
+     *
+     * @param itineraries the collection of itineraries that are being sorted.
+     */
+    public static void sortCostLow(List<Itinerary> itineraries) {
+        Collections.sort(itineraries, new Comparator<Itinerary>() {
+            @Override
+            public int compare(Itinerary i1, Itinerary i2) {
+                double costDiff = i2.getCost() - i1.getCost();
+
+                if (costDiff == 0)
+                    return 0;
+                else
+                    return costDiff > 0 ? 1 : -1;
+            }
+        });
+    }
+
+    /**
+     * Leverages the {@see sortCostLow} function to sort a collection of
+     * itineraries from highest to lowest in cost.
+     *
+     * @param itineraries the collection of itineraries that are being sorted.
+     */
+    public static void sortCostHigh(List<Itinerary> itineraries) {
+        sortCostLow(itineraries);
+
+        Collections.reverse(itineraries);
+    }
+
+    /**
+     * Sorts a collection of itineraries from lowest to highest in time.
+     * A lambda expression defining the comparator allows the travel time of an
+     * individual itinerary to be assessed.
+     *
+     * @param itineraries the collection of itineraries that are being sorted.
+     */
+    public static void sortTimeLow(List<Itinerary> itineraries) {
+        Collections.sort(itineraries, new Comparator<Itinerary>() {
+            @Override
+            public int compare(Itinerary i1, Itinerary i2) {
+                double diff = i2.getTravelTime() - i1.getTravelTime();
+
+                if (diff == 0)
+                    return 0;
+                else
+                    return diff > 0 ? 1 : -1;
+            }
+        });
+    }
+
+    /**
+     * Leverages the {@see sortTimeLow} function to sort a collection of
+     * itineraries from highest to lowest in terms of travel time.
+     *
+     * @param itineraries the collection of itineraries that are being sorted.
+     */
+    public static void sortTimeHigh(List<Itinerary> itineraries) {
+        sortTimeLow(itineraries);
+
+        Collections.reverse(itineraries);
+    }
+}

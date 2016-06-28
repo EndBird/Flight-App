@@ -1,0 +1,32 @@
+November 11, 2015 (Met from 17:00 - 18:30)
+First meeting with the whole team.
+
+Current State of the project:
+Team expectations agreement completed
+Availabilities of all team members made known to each other
+Contact information shared between all team members
+Discussion about how each group's programs designs can interact with each other 
+
+Upcoming Tasks:
+Merge CRC cards from both groups (Karn and Minh)
+Next meeting November 13, 2015 to determine various responsibilities
+
+November 13, 2015 (Met from 12:00 - 16:30)
+
+Karn:
+Implemented skeleton for search algorithm
+Began implementation for dataManager
+
+Michael:
+Implemented Flight class
+Implemented Itinerary class
+
+Bavneet:
+Added javadocs to flight and itinerary class
+Implemented User class
+
+Minh:
+Created graph
+Edited the user class
+Developed search algorithms for itineraries 
+Implemented Itinerary class
